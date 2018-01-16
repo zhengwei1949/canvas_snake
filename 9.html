@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+    #canvas{
+        background:black;
+        border:2px solid pink;
+    }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="400" height="400"></canvas>
+    <script>
+    var canvas = document.getElementById('canvas')
+    var ctx = canvas.getContext('2d')
+    function Snake(data){
+        this.data = data;
+    }
+    Snake.prototype.draw = function(){
+        ctx.clearRect(0,0,canvas.width,canvas.height)
+        //先画蛇头
+        ctx.beginPath()
+        ctx.save()
+        ctx.fillStyle = 'red'
+        ctx.fillRect(this.data.head.x, this.data.head.y, 20, 20)
+        ctx.restore()
+        //再画蛇身子
+        ctx.beginPath()
+        ctx.save()
+        ctx.fillStyle = 'green'
+        for (var i = 0; i < this.data.body.length; i++) {
+            ctx.fillRect(this.data.body[i].x, this.data.body[i].y, 20, 20)
+        }
+        ctx.restore()
+    }
+
+    Snake.prototype.setDirection = function(direction){
+        switch(direction){
+            case 'Left':
+                this.data.body.shift()
+                this.data.body.push(Object.assign({}, this.data.head))
+                this.data.head.x = this.data.head.x - 20
+                break 
+            case 'Right':
+                this.data.body.shift()
+                this.data.body.push(Object.assign({}, this.data.head))
+                this.data.head.x = this.data.head.x + 20
+                break 
+            case 'Top': 
+                this.data.body.shift()
+                this.data.body.push(Object.assign({}, this.data.head))
+                this.data.head.y = this.data.head.y - 20
+                break 
+            case 'Bottom': 
+                this.data.body.shift()
+                this.data.body.push(Object.assign({}, this.data.head))
+                this.data.head.y = this.data.head.y + 20
+                break 
+        }
+        
+    }
+
+    var snake = new Snake({
+            head: {
+                x: 40, y: 0
+            },
+            body: [{ x: 0, y: 0 }, { x: 20, y: 0 }]
+        })
+
+    snake.draw()
+
+    function Fruit(){
+        this.x = Math.floor(Math.random() * 20) * 20
+        this.y = Math.floor(Math.random() * 20) * 20
+    }
+
+    Fruit.prototype.draw = function(){
+        ctx.save()
+        ctx.fillStyle = 'yellow'
+        ctx.fillRect(this.x, this.y, 20, 20)
+        ctx.restore()
+    }
+
+    var fruit = new Fruit()//由于豆子的位置是随机的，我们没必要传参
+    fruit.draw()
+
+    document.onkeyup = function(e){
+        // console.log(e.keyCode)
+        switch(e.keyCode){
+            case 39:
+                snake.setDirection('Right')
+                break
+            case 37:
+                // console.log('左')
+                snake.setDirection('Left')
+                break 
+            case 38: 
+                // console.log('上')
+                snake.setDirection('Top')
+                break 
+            case 40: 
+                // console.log('下')
+                snake.setDirection('Bottom')
+                break 
+        }
+        if(snake.data.head.x === fruit.x && snake.data.head.y === fruit.y){
+            alert('吃掉了')
+        }
+        snake.draw()
+        fruit.draw()
+    }
+    </script>
+</body>
+</html>

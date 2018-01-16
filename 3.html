@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+    #canvas{
+        background:black;
+        border:2px solid pink;
+    }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="400" height="400"></canvas>
+    <script>
+    var canvas = document.getElementById('canvas')
+    var ctx = canvas.getContext('2d')
+    ctx.fillStyle = '#fff'
+    var data = {//记录蛇的左上角的坐标数据
+        head:{
+            x:40,y:0
+        },
+        body:[{x:0,y:0},{x:20,y:0}]
+    }
+    //先画蛇头
+    ctx.beginPath()
+    ctx.save()
+    ctx.fillStyle = 'red'
+    ctx.fillRect(data.head.x,data.head.y,20,20)
+    ctx.restore()
+    //再画蛇身子
+    ctx.beginPath()
+    ctx.save()
+    ctx.fillStyle = 'green'
+    for(var i=0;i<data.body.length;i++){
+        ctx.fillRect(data.body[i].x,data.body[i].y,20,20)
+    }
+    ctx.restore()
+    document.onkeyup = function(e){
+        // console.log(e.keyCode)
+        switch(e.keyCode){
+            case 39:
+                console.log('右')
+                break
+            case 37:
+                console.log('左')
+                break 
+            case 38: 
+                console.log('上')
+                break 
+            case 40: 
+                console.log('下')
+                break 
+        }
+    }
+    </script>
+</body>
+</html>
